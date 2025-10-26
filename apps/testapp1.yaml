@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: testapp1-deployment
+  name: testapp1
   labels:
     app: testapp1
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: testapp1
@@ -15,7 +15,20 @@ spec:
         app: testapp1
     spec:
       containers:
-      - name: testapp1
-        image: nginx:1.14.2
-        ports:
-        - containerPort: 80
+        - name: testapp1
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: testapp1
+spec:
+  selector:
+    app: testapp1
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 31080
+  type: NodePort
